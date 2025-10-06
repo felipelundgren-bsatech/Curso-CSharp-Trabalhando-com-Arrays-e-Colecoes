@@ -172,9 +172,11 @@ void TestaArrayDeContasCorrentes()
 
 List<ContaCorrente> _listaDeContas = new ()
 {
-    new ContaCorrente(874, "5679787-A"){Saldo = 100},
-    new ContaCorrente(874, "4456668-B"){Saldo = 300},
-    new ContaCorrente(874, "7781438-C"){Saldo = 200}
+    new ContaCorrente(874, "5679787-D"){Saldo = 700, Titular = new Cliente {Cpf ="11111",Nome= "henrique"}},
+    new ContaCorrente(875, "5679788-C"){Saldo = 300, Titular = new Cliente {Cpf ="22222",Nome= "felipe"}},
+    new ContaCorrente(876, "5679783-E"){Saldo = 400, Titular = new Cliente {Cpf ="33333",Nome= "edu"}},
+
+
 };
 
 AtendimentoCliente();
@@ -215,6 +217,12 @@ void AtendimentoCliente()
                 case '2':
                     ListarContas();
                     break;
+                case '3':
+                    RemoverContas();
+                    break;
+                case '4':
+                    OrdenarContas();
+                    break;
                 default:
                     Console.WriteLine("Opcao não implementada.");
                     break;
@@ -227,6 +235,49 @@ void AtendimentoCliente()
         Console.WriteLine($"{excecao.Message}");
     }
     
+}
+
+void OrdenarContas()
+{
+    Console.Clear();
+    Console.WriteLine("===============================");
+    Console.WriteLine("===     ORDENAR CONTAS     ===");
+    Console.WriteLine("===============================");
+    Console.WriteLine("\n");
+
+    _listaDeContas.Sort();
+    Console.WriteLine("... Contas ordenadas com sucesso! ...");
+    Console.ReadKey();
+}
+
+void RemoverContas()
+{
+    Console.Clear();
+    Console.WriteLine("===============================");
+    Console.WriteLine("===     REMOVER CONTA     ===");
+    Console.WriteLine("===============================");
+    Console.WriteLine("\n");
+    Console.Write("Informe o númeo da Conta:");
+    string numeroConta = Console.ReadLine();
+    ContaCorrente conta = null;
+    foreach (var item in _listaDeContas)
+    {
+        if (item.Conta.Equals(numeroConta))
+        {
+            conta = item;
+            
+        }
+    }
+    if (conta != null)
+    {
+        _listaDeContas.Remove(conta);
+        Console.WriteLine("... Conta removida com sucesso! ...");
+    }
+    else
+    {
+        Console.WriteLine("... Conta não encontrada! ...");
+    }
+    Console.ReadKey();
 }
 
 void ListarContas()
