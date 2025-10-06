@@ -1,8 +1,11 @@
 ﻿using bytebank.Modelos.Conta;
+using bytebank_ATENDIMENTO.bytebank.Excepitions;
 using bytebank_ATENDIMENTO.bytebank.Util;
 using System.Collections;
+using System.Threading.Channels;
 
 Console.WriteLine("Boas Vindas ao ByteBank, Atendimento.");
+
 
 #region Exemplos Arrays em C#
 //TestaArrayInt();
@@ -115,40 +118,115 @@ void TestaArrayDeContasCorrentes()
 //TestaArrayDeContasCorrentes();
 #endregion
 
-ArrayList _listaDeContas = new ArrayList();
+#region Exemplo List
+//Generica<int> teste1 = new ();
+//teste1.MostrarMensagem(10);
+
+//Generica<string> teste2 = new();
+//teste2.MostrarMensagem("Ola mundo");
+//public class Generica <T>
+//{
+//    public void MostrarMensagem(T item)
+//    {
+//        Console.WriteLine($"Exibindo {item}");
+//    }
+//}
+
+//List<ContaCorrente> _listaDeContas2 = new()
+//{
+//    new ContaCorrente(875, "5679787-A"){Saldo = 120},
+//    new ContaCorrente(876, "4456668-B"){Saldo = 330},
+//    new ContaCorrente(878, "7781438-C"){Saldo = 240}
+//};
+
+//List<ContaCorrente> _listaDeContas3 = new()
+//{
+//    new ContaCorrente(856, "5679787-E"){Saldo = 150},
+//    new ContaCorrente(823, "4456668-F"){Saldo = 350},
+//    new ContaCorrente(861, "7781438-G"){Saldo = 250}
+//};
+//_listaDeContas2.AddRange(_listaDeContas3);
+//_listaDeContas2.Reverse();
+
+//foreach (var item in _listaDeContas2)
+//{
+//    Console.WriteLine($"Conta: {item.Conta} - Agência: {item.Numero_agencia} - Saldo: {item.Saldo}");
+//}
+//Console.WriteLine("\n\n");
+
+
+//var range = _listaDeContas3.GetRange(0, 1);
+//foreach (var item in range)
+//{
+//    Console.WriteLine($"Conta: {item.Conta} - Agência: {item.Numero_agencia} - Saldo: {item.Saldo}");
+//}
+//range.Clear();
+//foreach (var item in range)
+//{
+//    Console.WriteLine($"Conta: {item.Conta} - Agência: {item.Numero_agencia} - Saldo: {item.Saldo}");
+//}
+//Console.WriteLine("\n\n");
+
+
+#endregion
+
+List<ContaCorrente> _listaDeContas = new ()
+{
+    new ContaCorrente(874, "5679787-A"){Saldo = 100},
+    new ContaCorrente(874, "4456668-B"){Saldo = 300},
+    new ContaCorrente(874, "7781438-C"){Saldo = 200}
+};
 
 AtendimentoCliente();
 void AtendimentoCliente()
 {
-    char opcao = '0';
-    while (opcao != '6')
+    try
     {
-        Console.Clear();
-        Console.WriteLine("===============================");
-        Console.WriteLine("===       Atendimento       ===");
-        Console.WriteLine("===1 - Cadastrar Conta      ===");
-        Console.WriteLine("===2 - Listar Contas        ===");
-        Console.WriteLine("===3 - Remover Conta        ===");
-        Console.WriteLine("===4 - Ordenar Contas       ===");
-        Console.WriteLine("===5 - Pesquisar Conta      ===");
-        Console.WriteLine("===6 - Sair do Sistema      ===");
-        Console.WriteLine("===============================");
-        Console.WriteLine("\n\n");
-        Console.Write("Digite a opção desejada: ");
-        opcao = Console.ReadLine()[0];
-        switch (opcao)
+        char opcao = '0';
+        while (opcao != '6')
         {
-            case '1':
-                CadastrarConta();
-                break;
-            case '2':
-                ListarContas();
-                break;
-            default:
-                Console.WriteLine("Opcao não implementada.");
-                break;
+            Console.Clear();
+            Console.WriteLine("===============================");
+            Console.WriteLine("===       Atendimento       ===");
+            Console.WriteLine("===1 - Cadastrar Conta      ===");
+            Console.WriteLine("===2 - Listar Contas        ===");
+            Console.WriteLine("===3 - Remover Conta        ===");
+            Console.WriteLine("===4 - Ordenar Contas       ===");
+            Console.WriteLine("===5 - Pesquisar Conta      ===");
+            Console.WriteLine("===6 - Sair do Sistema      ===");
+            Console.WriteLine("===============================");
+            Console.WriteLine("\n\n");
+            Console.Write("Digite a opção desejada: ");
+            try
+            {
+                opcao = Console.ReadLine()[0];
+            }
+            catch (Exception ex)
+            {
+
+                throw new ByteBankException(ex.Message);
+            }
+            
+            switch (opcao)
+            {
+                case '1':
+                    CadastrarConta();
+                    break;
+                case '2':
+                    ListarContas();
+                    break;
+                default:
+                    Console.WriteLine("Opcao não implementada.");
+                    break;
+            }
         }
     }
+    catch (ByteBankException excecao)
+    {
+
+        Console.WriteLine($"{excecao.Message}");
+    }
+    
 }
 
 void ListarContas()
@@ -168,6 +246,7 @@ void ListarContas()
     {
         Console.WriteLine("===  Dados da Conta  ===");
         Console.WriteLine("Número da Conta : " + item.Conta);
+        Console.WriteLine("Saldo da Conta : " + item.Saldo);
         Console.WriteLine("Titular da Conta: " + item.Titular.Nome);
         Console.WriteLine("CPF do Titular  : " + item.Titular.Cpf);
         Console.WriteLine("Profissão do Titular: " + item.Titular.Profissao);
@@ -206,6 +285,8 @@ void CadastrarConta()
     conta.Titular.Profissao = Console.ReadLine();
 
     _listaDeContas.Add(conta);
+    
     Console.WriteLine("... Conta cadastrada com sucesso! ...");
     Console.ReadKey();
 }
+
