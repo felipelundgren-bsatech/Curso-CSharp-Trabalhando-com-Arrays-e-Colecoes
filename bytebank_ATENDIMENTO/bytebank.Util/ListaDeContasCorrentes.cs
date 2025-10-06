@@ -39,5 +39,59 @@ namespace bytebank_ATENDIMENTO.bytebank.Util
             }
             _itens = novoArray;
         }
+
+        public void Remover( ContaCorrente item)
+        {
+            int indiceItem = -1;
+            for (int i = 0; i < _proximaPosicao; i++)
+            {
+                ContaCorrente itemAtual = _itens[i];
+                if (itemAtual.Equals(item))
+                {
+                    indiceItem = i;
+                    break;
+                }
+            }
+            if (indiceItem == -1)
+            {
+                return;
+            }
+
+            Console.WriteLine($"Removendo item da posição {indiceItem}");
+            for (int i = indiceItem; i < _proximaPosicao - 1; i++)
+            {
+                _itens[i] = _itens[i + 1];
+            }
+            _proximaPosicao--;
+            _itens[_proximaPosicao] = null;
+        }
+        public void ExibeLista()
+        {
+            for (int i = 0; i < _proximaPosicao; i++)
+            {
+                ContaCorrente conta = _itens[i];
+                Console.WriteLine($"Conta no índice {i}: {conta.Conta} - Saldo {conta.Saldo}");
+            }
+        }
+
+        public ContaCorrente RecuperarContaNoIndice(int indice)
+        {
+            if ( indice <0 ||indice>= _proximaPosicao)
+            {
+                throw new ArgumentOutOfRangeException(nameof(indice));
+            }
+            return _itens[indice];
+        }
+        public int Tamanho
+        {
+            get { return _proximaPosicao; }
+        }
+        public ContaCorrente this[int indice]
+        {
+            get
+            {
+                return RecuperarContaNoIndice(indice);
+            }
+        }
     }
 }

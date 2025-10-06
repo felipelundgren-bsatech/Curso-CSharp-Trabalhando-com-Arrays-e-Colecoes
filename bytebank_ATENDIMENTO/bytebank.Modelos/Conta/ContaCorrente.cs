@@ -96,7 +96,7 @@
 			return true;
 		}
 
-		public ContaCorrente(int numero_agencia)
+		public ContaCorrente(int numero_agencia, string? numeroConta)
 		{
 			Numero_agencia = numero_agencia;
 			Conta = Guid.NewGuid().ToString().Substring(0, 8);

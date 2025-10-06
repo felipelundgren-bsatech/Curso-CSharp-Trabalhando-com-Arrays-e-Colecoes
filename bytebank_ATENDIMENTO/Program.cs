@@ -1,9 +1,11 @@
 ﻿using bytebank.Modelos.Conta;
 using bytebank_ATENDIMENTO.bytebank.Util;
+using System.Collections;
+using System.Collections.Concurrent;
 
 Console.WriteLine("Boas Vindas ao ByteBank, Atendimento.");
 
-
+#region Exemplos Arrays e Coleções
 void TestarArrayInt()
 {
     int[] idades = {15, 28, 35, 42, 57};
@@ -80,5 +82,132 @@ void TestarArrayDeContasCorrentes()
     listaDeContas.Adicionar(new ContaCorrente(874) { Conta = "4040-X", Saldo = 400 });
     listaDeContas.Adicionar(new ContaCorrente(874) { Conta = "5050-X", Saldo = 500 });
     listaDeContas.Adicionar(new ContaCorrente(874) { Conta = "6060-X", Saldo = 600 });
+    var contaDoFelipe = new ContaCorrente(874) { Conta = "7070-X", Saldo = 700 };
+    listaDeContas.Adicionar(contaDoFelipe);
+    //listaDeContas.ExibeLista();
+    //Console.WriteLine("----------------------------------------------------");
+    //listaDeContas.Remover(contaDoFelipe);
+    //listaDeContas.ExibeLista();
+    for (int i = 0; i < listaDeContas.Tamanho; i++)
+    {
+        ContaCorrente conta = listaDeContas[i];
+        Console.WriteLine($"Indice [{i}] = {conta.Conta}/{conta.Numero_agencia}");
+    }
+
 }
-TestarArrayDeContasCorrentes();
+//TestarArrayDeContasCorrentes();
+#endregion
+
+ArrayList _listaDeContas = new ArrayList();
+void AtendimentoCliente()
+{
+    char op = '0';
+    while (op!='6')
+    {
+        Console.Clear();
+        Console.WriteLine("Atendimento ao Cliente - ByteBank");
+        Console.WriteLine("------------------------------");
+        Console.WriteLine("1 - Cadastrar Conta Corrente");
+        Console.WriteLine("2 - Listar Contas Correntes");
+        Console.WriteLine("3 - Remover Conta Corrente");
+        Console.WriteLine("4 - Ordenar Contas Correntes");
+        Console.WriteLine("5 - Pesquisar Conta Corrente");
+        Console.WriteLine("6 - Sair Do Sistema");
+        Console.WriteLine("\n\n");
+        Console.Write("Digite a Opção Desejada: ");
+        op = Console.ReadLine()[0];
+        switch (op)
+        {
+            case '1':
+                Console.Clear();
+                Console.WriteLine("Cadastro de Conta Corrente");
+                Console.WriteLine("------------------------------");
+                CadastrarConta();
+                
+                break;
+            case '2':
+                Console.Clear();
+                Console.WriteLine("Listar Contas Correntes");
+                Console.WriteLine("------------------------------");
+                ListarContas();
+                break;
+            case '3':
+                Console.Clear();
+                Console.WriteLine("Remover Conta Corrente");
+                Console.WriteLine("------------------------------");
+                break;
+            case '4':
+                Console.Clear();
+                Console.WriteLine("Ordenar Contas Correntes");
+                Console.WriteLine("------------------------------");
+                break;
+            case '5':
+                Console.Clear();
+                Console.WriteLine("Pesquisar Conta Corrente");
+                Console.WriteLine("------------------------------");
+                break;
+            case '6':
+                Console.Clear();
+                Console.WriteLine("Obrigado por utilizar o ByteBank!");
+                break;
+            default:
+                Console.Clear();
+                Console.WriteLine("Opção Inválida! Tente Novamente.");
+                break;
+        }
+    }
+}
+
+void ListarContas()
+{
+    Console.WriteLine("Lista de Contas");
+    Console.WriteLine("-------------------------");
+    if (_listaDeContas.Count<=0)
+    {
+        Console.WriteLine("--- Não há contas cadastradas ---");
+        Console.ReadKey();
+        return;
+    }
+    foreach (ContaCorrente conta in _listaDeContas)
+    {
+        Console.WriteLine("--- Dados da conta ---");
+        Console.WriteLine($"Numero da Conta: {conta.Conta}");
+        Console.WriteLine($"Número da Agência: {conta.Numero_agencia}");
+        Console.WriteLine($"Titular: {conta.Titular.Nome}");
+        Console.WriteLine($"CPF do Titular: {conta.Titular.Cpf}");
+        Console.WriteLine($"Saldo: {conta.Saldo}");
+        Console.WriteLine("-------------------------");
+
+    }
+}
+
+void CadastrarConta()
+{
+    Console.WriteLine("Cadastramento de contas: ");
+    Console.WriteLine("-------------------------");
+   
+    Console.Write("Número da conta: ");
+    string numeroConta = Console.ReadLine();
+  
+    Console.Write("Numero da Agencia: ");
+    int numeroAgencia = int.Parse(Console.ReadLine());
+    ContaCorrente conta = new ContaCorrente(numeroAgencia, numeroConta);
+  
+    Console.Write("Informe o saldo inicial: ");
+    conta.Saldo = double.Parse(Console.ReadLine());
+   
+    Console.Write("Informe o titular: ");
+    conta.Titular.Nome = Console.ReadLine();
+    
+    Console.Write("Informe o CPF do titular: ");
+    conta.Titular.Cpf = Console.ReadLine();
+    
+    Console.Write("Informe a profissão do titular: ");
+    conta.Titular.Profissao = Console.ReadLine();
+
+    _listaDeContas.Add(conta);
+    Console.WriteLine("---Conta cadastrada com sucesso---");
+    Console.ReadLine();
+}
+
+AtendimentoCliente();
